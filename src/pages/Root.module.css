@@ -1,0 +1,44 @@
+.container {
+  padding: 32px;
+}
+
+.title {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.btnRow {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn {
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.btn:hover {
+  opacity: 0.6;
+}
+
+.filled {
+}
+.outlined {
+}
+
+.btn.filled {
+  border: none;
+  background: #6d2aff;
+  color: #fff;
+}
+
+.btn.outlined {
+  background: none;
+  border: 1px solid #6d2aff;
+  color: #6d2aff;
+}
