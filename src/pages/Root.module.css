@@ -8,6 +8,11 @@
   margin-bottom: 16px;
 }
 
+.expiryRow {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
 .btnRow {
   display: flex;
   justify-content: center;
