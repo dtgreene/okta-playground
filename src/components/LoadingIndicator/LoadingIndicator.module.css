@@ -1,0 +1,33 @@
+.row {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin: 32px 0;
+}
+
+.dot {
+  width: 16px;
+  height: 16px;
+  background: #555;
+  border-radius: 50%;
+}
+
+.dot:nth-child(even) {
+  animation: bounce 1s ease-in-out 0s infinite;
+}
+
+.dot:nth-child(odd) {
+  animation: bounce 1s ease-in-out -0.5s infinite reverse;
+}
+
+@keyframes bounce {
+  0% {
+    transform: translateY(-10px);
+  }
+  50% {
+    transform: translateY(10px);
+  }
+  100% {
+    transform: translateY(-10px);
+  }
+}

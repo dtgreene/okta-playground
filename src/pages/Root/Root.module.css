@@ -8,6 +8,29 @@
   margin-bottom: 16px;
 }
 
+.infoContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.infoBox {
+  width: 300px;
+  margin-bottom: 16px;
+  padding: 16px;
+  background: #222;
+  border-radius: 4px;
+  border: 1px solid #444;
+}
+
+.info {
+  display: flex;
+  justify-content: space-between;
+}
+
+.info:not(:last-child) {
+  margin-bottom: 8px;
+}
+
 .expiryRow {
   text-align: center;
   margin-bottom: 16px;
@@ -38,12 +61,12 @@
 
 .btn.filled {
   border: none;
-  background: #6d2aff;
+  background: #473fff;
   color: #fff;
 }
 
 .btn.outlined {
   background: none;
-  border: 1px solid #6d2aff;
-  color: #6d2aff;
+  border: 1px solid #bfbcff;
+  color: #bfbcff;
 }

@@ -1,0 +1,17 @@
+.container {
+  padding: 64px 0;
+}
+
+.text {
+  text-align: center;
+}
+
+.linkRow {
+  text-align: center;
+  padding: 8px;
+}
+
+.link,
+.link:visited {
+  color: #4e4eff
+}

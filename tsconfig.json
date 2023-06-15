@@ -18,7 +18,10 @@
     "noFallthroughCasesInSwitch": true,
     "strictPropertyInitialization": false,
     "noUncheckedIndexedAccess": true,
-    "baseUrl": "./src"
+    "baseUrl": "src",
+    "paths": {
+      "app/*": ["./*"]
+    }
   },
-  "include": ["src"]
+  "include": ["src"],
 }

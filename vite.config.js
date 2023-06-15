@@ -1,3 +1,4 @@
+import { fileURLToPath, URL } from 'node:url';
 import { defineConfig, loadEnv } from 'vite';
 import reactRefresh from '@vitejs/plugin-react';
 import dns from 'dns';
@@ -21,11 +22,9 @@ export default defineConfig(({ mode }) => {
       port: 3000,
     },
     plugins: [reactRefresh()],
-    define: {
-      // variables used by the admin-ui package
-      'process.env': {
-        REACT_APP_OAUTH_ISSUER: process.env.VITE_OAUTH_ISSUER,
-        REACT_APP_OAUTH_CLIENTID: process.env.VITE_OAUTH_CLIENTID,
+    resolve: {
+      alias: {
+        'app': fileURLToPath(new URL('./src', import.meta.url)),
       },
     },
   };
