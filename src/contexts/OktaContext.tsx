@@ -68,6 +68,12 @@ export const OktaProvider = ({ children }: IOktaProviderProps) => {
         }
       );
     }
+
+    return () => {
+      if (oktaHelper.current) {
+        oktaHelper.current.destroy();
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -85,7 +91,7 @@ export const OktaProvider = ({ children }: IOktaProviderProps) => {
   };
 
   const refreshTokens = () => {
-    if(oktaHelper.current) {
+    if (oktaHelper.current) {
       oktaHelper.current.refreshTokens();
     }
   };

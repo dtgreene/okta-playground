@@ -87,6 +87,9 @@ export class OktaHelper {
     this.auth.start();
   }
   destroy = () => {
+    // This does not actually destroy the instance
+    // but it should not be used after calling this
+    // method.
     this.auth.authStateManager.unsubscribe(this.handleStateChange);
     this.auth.tokenManager.off('expired', this.handleTokenExpire);
     this.auth.stop();
@@ -160,13 +163,11 @@ export class OktaHelper {
       this.navigate(fallbackPath);
     }
   };
-  navigate = (path?: string) => {
-    if (path) {
-      if (this.onNavigate) {
-        this.onNavigate(path);
-      } else {
-        window.location.replace(path);
-      }
+  navigate = (path: string) => {
+    if (this.onNavigate) {
+      this.onNavigate(path);
+    } else {
+      window.location.replace(path);
     }
   };
   refreshTokens = async () => {
@@ -185,9 +186,10 @@ export class OktaHelper {
         });
       } catch {
         // Renewing tokens with the above method requires
-        // third-party cookies to be enabled. This is not
-        // available in FireFox and will fail. In that case
-        // we want to refresh the page to renew the tokens.
+        // third-party cookies to be enabled. These are disabled
+        // by default in some browsers (FireFox). In that,
+        // case, the above will fail and we need to refresh
+        // the page to renew.
         window.location.reload();
       }
     }
