@@ -1,8 +1,6 @@
 import OktaAuth, {
-  AccessToken,
   AuthState,
   CustomUserClaimValue,
-  IDToken,
   toRelativeUrl,
 } from '@okta/okta-auth-js';
 
