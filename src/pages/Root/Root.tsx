@@ -13,7 +13,7 @@ type ExpireTime = { minutes: number; seconds: number };
 
 export const Root = () => {
   const pendingReload = useRef(false);
-  const { accessToken, signOut, refreshTokens } = useContext(OktaContext);
+  const { accessToken, signOut } = useContext(OktaContext);
   const [expireTime, setExpireTime] = useState<ExpireTime>({
     minutes: 0,
     seconds: 0,
@@ -60,10 +60,6 @@ export const Root = () => {
     }
   };
 
-  const handleRefreshClick = () => {
-    refreshTokens();
-  };
-
   const isExpireEarly = Boolean(storage.expireEarly);
   const earlyExpireDisplay = isExpireEarly
     ? getEarlyExpire(expireTime)
@@ -95,12 +91,6 @@ export const Root = () => {
         </div>
       </div>
       <div className={styles.btnRow}>
-        <button
-          className={cx(styles.btn, styles.filled)}
-          onClick={handleRefreshClick}
-        >
-          Refresh
-        </button>
         <button className={cx(styles.btn, styles.outlined)} onClick={signOut}>
           Sign Out
         </button>

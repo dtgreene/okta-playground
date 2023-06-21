@@ -12,7 +12,6 @@ interface IOktaContext {
   user: IShiptUser | null;
   accessToken: IAccessToken | null;
   signOut: () => Promise<void>;
-  refreshTokens: () => void;
 }
 
 interface IAccessToken {
@@ -35,7 +34,6 @@ const defaultContext = {
   user: null,
   accessToken: null,
   signOut: async () => {},
-  refreshTokens: () => {},
 };
 
 const defaultValue = {
@@ -46,7 +44,7 @@ const defaultValue = {
 
 export const OktaContext = createContext<IOktaContext>(defaultContext);
 export const OktaProvider = ({ children }: IOktaProviderProps) => {
-  const oktaHelper = useRef<OktaHelper>();
+  const oktaHelper = useRef<OktaHelper | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
   const [value, setValue] = useState<IOktaHelperState>(defaultValue);
@@ -72,6 +70,7 @@ export const OktaProvider = ({ children }: IOktaProviderProps) => {
     return () => {
       if (oktaHelper.current) {
         oktaHelper.current.destroy();
+        oktaHelper.current = null;
       }
     };
   }, []);
@@ -90,16 +89,8 @@ export const OktaProvider = ({ children }: IOktaProviderProps) => {
     return Promise.reject();
   };
 
-  const refreshTokens = () => {
-    if (oktaHelper.current) {
-      oktaHelper.current.refreshTokens();
-    }
-  };
-
   return (
-    <OktaContext.Provider
-      value={Object.assign(value, { signOut, refreshTokens })}
-    >
+    <OktaContext.Provider value={{ ...value, signOut }}>
       {!value.isAuthenticated ? <Loading message="Signing in..." /> : children}
     </OktaContext.Provider>
   );

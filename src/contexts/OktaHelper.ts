@@ -67,9 +67,6 @@ export class OktaHelper {
       redirectUri: `${location.origin}${callbackPath}`,
       postLogoutRedirectUri: `${location.origin}${logoutPath}`,
       scopes: ['openid', 'profile'],
-      services: {
-        autoRenew: false,
-      },
       tokenManager: {
         expireEarlySeconds: Boolean(storage.expireEarly)
           ? EXPIRE_SECONDS.early
@@ -81,8 +78,6 @@ export class OktaHelper {
 
     // Subscribe to auth state changes
     this.auth.authStateManager.subscribe(this.handleStateChange);
-    // Subscribe to token expire events
-    this.auth.tokenManager.on('expired', this.handleTokenExpire);
     // Start the auth service
     this.auth.start();
   }
@@ -91,7 +86,6 @@ export class OktaHelper {
     // but it should not be used after calling this
     // method.
     this.auth.authStateManager.unsubscribe(this.handleStateChange);
-    this.auth.tokenManager.off('expired', this.handleTokenExpire);
     this.auth.stop();
   };
   handleStateChange = (state?: AuthState) => {
@@ -138,9 +132,6 @@ export class OktaHelper {
       this.auth.signInWithRedirect();
     }
   };
-  handleTokenExpire = () => {
-    this.refreshTokens();
-  };
   update = async (pathname: string) => {
     if (this.lastPathName === pathname) return;
 
@@ -168,30 +159,6 @@ export class OktaHelper {
       this.onNavigate(path);
     } else {
       window.location.replace(path);
-    }
-  };
-  refreshTokens = async () => {
-    // Get the current access and id tokens
-    const { accessToken, idToken } = await this.auth.tokenManager.getTokens();
-
-    if (accessToken && idToken) {
-      try {
-        // Renew the two tokens
-        const nextAccessToken = await this.auth.token.renew(accessToken);
-        const nextIdToken = await this.auth.token.renew(idToken);
-
-        this.auth.tokenManager.setTokens({
-          accessToken: nextAccessToken as AccessToken,
-          idToken: nextIdToken as IDToken,
-        });
-      } catch {
-        // Renewing tokens with the above method requires
-        // third-party cookies to be enabled. These are disabled
-        // by default in some browsers (FireFox). In that,
-        // case, the above will fail and we need to refresh
-        // the page to renew.
-        window.location.reload();
-      }
     }
   };
   signOut = () => {
