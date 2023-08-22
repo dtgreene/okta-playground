@@ -11,7 +11,7 @@ interface IOktaProviderProps {
 interface IOktaContext {
   user: IShiptUser | null;
   accessToken: IAccessToken | null;
-  signOut: () => Promise<void>;
+  signOut: () => Promise<boolean>;
 }
 
 interface IAccessToken {
@@ -33,7 +33,7 @@ interface IShiptUser extends IShiptUserBase {
 const defaultContext = {
   user: null,
   accessToken: null,
-  signOut: async () => {},
+  signOut: async () => false,
 };
 
 const defaultValue = {
@@ -51,17 +51,19 @@ export const OktaProvider = ({ children }: IOktaProviderProps) => {
 
   useEffect(() => {
     if (!oktaHelper.current) {
+      const onStateChange = (state: IOktaHelperState) => {
+        if (state) {
+          setValue(state);
+        } else {
+          setValue(defaultValue);
+        }
+      };
+
       oktaHelper.current = new OktaHelper(
         import.meta.env.VITE_OAUTH_ISSUER,
         import.meta.env.VITE_OAUTH_CLIENTID,
         {
-          onStateChange: (state) => {
-            if (state) {
-              setValue(state);
-            } else {
-              setValue(defaultValue);
-            }
-          },
+          onStateChange,
           onNavigate: navigate,
         }
       );

@@ -49,7 +49,6 @@ export class OktaHelper {
     accessToken: null,
     isAuthenticated: false,
   };
-  lastPathName: string = '';
   redirectInProgress: boolean = false;
 
   constructor(
@@ -112,6 +111,7 @@ export class OktaHelper {
           },
           isAuthenticated: state.isAuthenticated,
         };
+        this.redirectInProgress = false;
 
         if (this.onStateChange) {
           this.onStateChange(this.state);
@@ -131,9 +131,7 @@ export class OktaHelper {
     }
   };
   update = async (pathname: string) => {
-    if (this.lastPathName === pathname) return;
-
-    this.lastPathName = pathname;
+    if (this.redirectInProgress) return;
 
     if (this.auth.isLoginRedirect()) {
       try {
@@ -143,7 +141,7 @@ export class OktaHelper {
         console.error(`Redirect failed: ${error}`);
         this.navigate(fallbackPath);
       }
-    } else if (window.location.pathname === callbackPath) {
+    } else if (pathname === callbackPath) {
       // In this case, the auth instance doesn't consider this
       // to be a login redirect even though the user is on
       // /login-callback.  This could happen if the user manually
